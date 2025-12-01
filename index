@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Смешанные числа в неправильную дробь</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #eef3ff;
+      color: #222;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      flex: 1 1 280px;
+      min-width: 0;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .algorithm-list {
+      padding-left: 18px;
+      margin: 6px 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .example {
+      background: #f4f6ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.95rem;
+      margin-top: 8px;
+    }
+
+    .toggle-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      border: 1px solid #ccd4ff;
+      background: #f5f6ff;
+      cursor: pointer;
+    }
+
+    .toggle-btn:hover {
+      background: #e8ebff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Дроби и задание */
+    .task {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .task-label {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .mixed {
+      font-weight: 600;
+    }
+
+    .fraction {
+      display: inline-block;
+      text-align: center;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    .fraction .num {
+      display: block;
+      border-bottom: 2px solid #000;
+      padding: 0 4px 2px;
+    }
+
+    .fraction .den {
+      display: block;
+      padding-top: 2px;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    select, input[type="number"] {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #ccd0e0;
+      font-size: 0.95rem;
+      min-width: 80px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: #4b6bff;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .btn.secondary {
+      background: #f0f2ff;
+      color: #333;
+      border: 1px solid #ccd4ff;
+    }
+
+    .btn:hover {
+      filter: brightness(1.05);
+    }
+
+    .answers-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .answers-row label {
+      margin-right: 4px;
+    }
+
+    .feedback {
+      min-height: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feedback.correct {
+      color: #0a8a2a;
+    }
+
+    .feedback.wrong {
+      color: #d32f2f;
+    }
+
+    .explanation {
+      font-size: 0.96rem;
+      background: #f7f7ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      min-height: 30px;
+    }
+
+    .score {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .score span {
+      font-weight: 700;
+    }
+
+    .tip {
+      font-size: 0.85rem;
+      margin-top: 8px;
+      color: #555;
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+      .task {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Смешанные числа в неправильную дробь</h1>
+      <p>5&nbsp;класс: тренируем перевод из смешанного числа в неправильную дробь.</p>
+    </header>
+
+    <main class="layout">
+      <!-- Блок с алгоритмом -->
+      <section class="card">
+        <h2>Алгоритм перевода</h2>
+        <p><strong>Смешанное число</strong> — это <strong>целая часть</strong> и <strong>правильная дробь</strong> рядом.</p>
+
+        <h3>Шаги алгоритма</h3>
+        <ol class="algorithm-list">
+          <li><strong>Посмотри</strong> на целую часть и знаменатель.</li>
+          <li><strong>Умножь</strong> целую часть на знаменатель.</li>
+          <li><strong>Прибавь</strong> к результату числитель.</li>
+          <li><strong>Оставь</strong> знаменатель таким же.</li>
+          <li><strong>Запиши</strong> результат в виде дроби: новый числитель / старый знаменатель.</li>
+        </ol>
+
+        <div class="example">
+          <strong>Пример.</strong><br>
+          Было: <span class="mixed">3 <span class="fraction"><span class="num">2</span><span class="den">5</span></span></span><br>
+          1) <strong>3 × 5 = 15</strong><br>
+          2) <strong>15 + 2 = 17</strong><br>
+          3) Знаменатель остаётся 5.<br>
+          Получили: <strong><span class="fraction"><span class="num">17</span><span class="den">5</span></span></strong>
+        </div>
+
+        <button class="toggle-btn" id="toggleHelpBtn">Скрыть/показать краткую подсказку</button>
+
+        <div id="shortHelp">
+          <h3>Короткая формула</h3>
+          <p>
+            <strong>
+              <span class="fraction">
+                <span class="num">(целая часть × знаменатель + числитель)</span>
+                <span class="den">знаменатель</span>
+              </span>
+            </strong>
+          </p>
+          <p class="tip">Можно проговаривать вслух: «целую часть умножаю на знаменатель, прибавляю числитель».</p>
+        </div>
+      </section>
+
+      <!-- Тренажёр -->
+      <section class="card">
+        <h2>Тренажёр</h2>
+
+        <div class="controls-row">
+          <label for="difficulty"><strong>Уровень:</strong></label>
+          <select id="difficulty">
+            <option value="easy">Лёгкий (маленькие числа)</option>
+            <option value="medium">Средний</option>
+            <option value="hard">Сложный</option>
+          </select>
+
+        <button class="btn secondary" id="newTaskBtn">Новый пример</button>
+        </div>
+
+        <div class="task">
+          <span class="task-label">Переведи в неправильную дробь:</span>
+          <span class="mixed">
+            <span id="whole">?</span>
+            <span class="fraction">
+              <span class="num" id="num">?</span>
+              <span class="den" id="den">?</span>
+            </span>
+          </span>
+        </div>
+
+        <div class="answers-row">
+          <label><strong>Ответ:</strong></label>
+          <span class="fraction">
+            <span class="num">
+              <input type="number" id="answerNum" placeholder="числитель">
+            </span>
+            <span class="den">
+              <input type="number" id="answerDen" placeholder="знаменатель">
+            </span>
+          </span>
+          <button class="btn" id="checkBtn">Проверить</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="explanation" id="explanation">
+          Нажми «Новый пример», переведи число и затем «Проверить».
+        </div>
+
+        <div class="score" id="score">
+          Правильно: <span id="correctCount">0</span> из <span id="totalCount">0</span>
+        </div>
+
+        <p class="tip">
+          Подсказка: сначала в уме посчитай новый числитель: «целую часть умножаю на знаменатель и прибавляю числитель»,
+          а уже потом записывай в поля ответа.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Переменные состояния
+    let currentWhole = null;
+    let currentNum = null;
+    let currentDen = null;
+    let total = 0;
+    let correct = 0;
+
+    // Элементы
+    const wholeEl = document.getElementById('whole');
+    const numEl = document.getElementById('num');
+    const denEl = document.getElementById('den');
+    const answerNumEl = document.getElementById('answerNum');
+    const answerDenEl = document.getElementById('answerDen');
+    const feedbackEl = document.getElementById('feedback');
+    const explanationEl = document.getElementById('explanation');
+    const correctCountEl = document.getElementById('correctCount');
+    const totalCountEl = document.getElementById('totalCount');
+    const difficultyEl = document.getElementById('difficulty');
+    const newTaskBtn = document.getElementById('newTaskBtn');
+    const checkBtn = document.getElementById('checkBtn');
+    const toggleHelpBtn = document.getElementById('toggleHelpBtn');
+    const shortHelpEl = document.getElementById('shortHelp');
+
+    // Случайное целое [min, max]
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateTask() {
+      const difficulty = difficultyEl.value;
+
+      let whole, numerator, denominator;
+
+      if (difficulty === 'easy') {
+        denominator = getRandomInt(2, 9);
+        whole = getRandomInt(1, 5);
+        numerator = getRandomInt(1, denominator - 1);
+      } else if (difficulty === 'medium') {
+        denominator = getRandomInt(2, 12);
+        whole = getRandomInt(1, 9);
+        numerator = getRandomInt(1, denominator - 1);
+      } else { // hard
+        denominator = getRandomInt(3, 12);
+        whole = getRandomInt(2, 12);
+        numerator = getRandomInt(1, denominator - 1);
+      }
+
+      currentWhole = whole;
+      currentNum = numerator;
+      currentDen = denominator;
+
+      wholeEl.textContent = whole;
+      numEl.textContent = numerator;
+      denEl.textContent = denominator;
+
+      // Очистка полей ответа и сообщений
+      answerNumEl.value = "";
+      answerDenEl.value = "";
+      feedbackEl.textContent = "";
+      feedbackEl.classList.remove('correct', 'wrong');
+      // explanationEl оставляем, чтобы ученик видел прошлое объяснение
+    }
+
+    function buildExplanationHTML(whole, num, den) {
+      const step1Num = whole + " × " + den + " + " + num;
+      const step2Num = (whole * den) + " + " + num;
+      const finalNum = whole * den + num;
+
+      const mixedHTML =
+        whole + " " +
+        '<span class="fraction">' +
+          '<span class="num">' + num + '</span>' +
+          '<span class="den">' + den + '</span>' +
+        '</span>';
+
+      const step1HTML =
+        '<span class="fraction">' +
+          '<span class="num">(' + step1Num + ')</span>' +
+          '<span class="den">' + den + '</span>' +
+        '</span>';
+
+      const step2HTML =
+        '<span class="fraction">' +
+          '<span class="num">(' + step2Num + ')</span>' +
+          '<span class="den">' + den + '</span>' +
+        '</span>';
+
+      const resultHTML =
+        '<span class="fraction">' +
+          '<span class="num">' + finalNum + '</span>' +
+          '<span class="den">' + den + '</span>' +
+        '</span>';
+
+      return mixedHTML + " = " + step1HTML + " = " + step2HTML + " = " + resultHTML;
+    }
+
+    function checkAnswer() {
+      if (currentDen === null) {
+        feedbackEl.textContent = "Сначала нажми «Новый пример».";
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      const userNum = parseInt(answerNumEl.value, 10);
+      const userDen = parseInt(answerDenEl.value, 10);
+
+      if (isNaN(userNum) || isNaN(userDen)) {
+        feedbackEl.textContent = "Заполни оба поля: числитель и знаменатель.";
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      const correctNum = currentWhole * currentDen + currentNum;
+      const correctDen = currentDen;
+
+      total++;
+      totalCountEl.textContent = total.toString();
+
+      // Объяснение с настоящими дробями
+      explanationEl.innerHTML = buildExplanationHTML(currentWhole, currentNum, currentDen);
+
+      if (userNum === correctNum && userDen === correctDen) {
+        correct++;
+        correctCountEl.textContent = correct.toString();
+        feedbackEl.textContent = "Верно! Молодец 👍";
+        feedbackEl.classList.remove('wrong');
+        feedbackEl.classList.add('correct');
+
+        // Автоматически даём новый пример после правильного ответа
+        generateTask();
+      } else {
+        feedbackEl.textContent = "Пока нет. Посмотри на объяснение и попробуй ещё раз или возьми новый пример.";
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+      }
+    }
+
+    function toggleHelp() {
+      if (shortHelpEl.classList.contains('hidden')) {
+        shortHelpEl.classList.remove('hidden');
+      } else {
+        shortHelpEl.classList.add('hidden');
+      }
+    }
+
+    // Обработчики
+    newTaskBtn.addEventListener('click', generateTask);
+    checkBtn.addEventListener('click', checkAnswer);
+    toggleHelpBtn.addEventListener('click', toggleHelp);
+
+    // Первый пример при загрузке
+    generateTask();
+  </script>
+</body>
+</html>
